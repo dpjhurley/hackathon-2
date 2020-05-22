@@ -2,8 +2,8 @@
 
 class Pacman{
   constructor(xpos, ypos ,mouth) {
-    this.xpos = xpos;
-    this.ypos = ypos;
+    this.xpos = xpos * TILE_SIZE;
+    this.ypos = ypos * TILE_SIZE;
     this.mouth = mouth;
   }
 
@@ -42,13 +42,13 @@ class Pacman{
   }
 
   move(direction) {
-    if (direction === 'right') {
+    if (direction === 'right' && this.xpos < (9 * TILE_SIZE)) {
         this.xpos += TILE_SIZE;
-    } else if (direction === 'left') {
+    } else if (direction === 'left' && this.xpos > 0) {
         this.xpos -= TILE_SIZE;
-    } else if (direction === 'down') {
+    } else if (direction === 'down' && this.ypos < (4 * TILE_SIZE)) {
         this.ypos += TILE_SIZE;
-    } else if (direction === 'up') {
+    } else if (direction === 'up' && this.ypos > 0) {
         this.ypos -= TILE_SIZE;
     }
     if (this.mouth === true) {
