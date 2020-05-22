@@ -24,6 +24,12 @@ class Pacman{
         this.mouth = mouth;
     }
 
+    render() {
+        const entityElm = document.createElement('div');
+        entityElm.className = 'entity entity--pac pacboy-active-dark';
+        this.update();
+    }
+
     moveRight() {
         const pacFace = document.querySelector('.pacboy-active-dark');
         xpos += TILE_SIZE
@@ -35,6 +41,9 @@ class Pacman{
         }
     }
     update() {
+        if (this.mouth === true) {
+            const pacFace = document.querySelector('.pacboy-active-dark');
+        }
         document.addEventListener('keydown', (event) => {
             if(event.code === 'ArrowRight') {
                 moveRight()
