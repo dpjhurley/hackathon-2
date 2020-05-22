@@ -21,16 +21,16 @@ class Pacman{
     this.update();
   }
 
-  update() {
+  update(direction) {
     this.element.style.left = `${pac1.xpos}px`;
     this.element.style.top = `${pac1.ypos}px`;
-    if (this.direction === 'right') {
+    if (direction === 'right') {
         this.element.style.backgroundPositionY = '0%';
-    } else if (this.direction === 'left') {
+    } else if (direction === 'left') {
         this.element.style.backgroundPositionY = '33%';
-    } else if (this.direction === 'down') {
+    } else if (direction === 'down') {
         this.element.style.backgroundPositionY = '66%';
-    } else if (this.direction === 'up') {
+    } else if (direction === 'up') {
         this.element.style.backgroundPositionY = '100%';
     }
     if (this.mouth === true) {
@@ -47,9 +47,9 @@ class Pacman{
     } else if (direction === 'left') {
         this.xpos -= TILE_SIZE;
     } else if (direction === 'down') {
-        this.xpos += TILE_SIZE;
+        this.ypos += TILE_SIZE;
     } else if (direction === 'up') {
-        this.xpos -= TILE_SIZE;
+        this.ypos -= TILE_SIZE;
     }
     if (this.mouth === true) {
     this.element.style.backgroundPositionX = '100%';
