@@ -45,9 +45,27 @@ const TILE_SIZE = 85;
 //     }
 //   } 
 // });
-
-
 const app = document.querySelector('#app')
 
 const pac1 = new Pacman (600, 400, true);
 pac1.mount(app)
+
+document.addEventListener('keydown', (event) => {
+if(event.code === 'ArrowRight') {
+  pac1.move('right');
+  pac1.update();
+} else if (event.code === 'ArrowLeft') {
+  pac1.move('left');
+  pac1.update();
+
+} else if (event.code === 'ArrowDown') {
+  pac1.move('down');
+  pac1.update();
+
+} else if (event.code === 'ArrowUp') {
+  pac1.move('up');
+  pac1.update();
+
+}
+});
+
