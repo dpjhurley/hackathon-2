@@ -1,10 +1,12 @@
 'use strict';
 
 class Pacman{
-  constructor(xpos, ypos ,mouth) {
+  constructor(xpos, ypos ,mouth, maxWidth, maxHeight) {
     this.xpos = xpos * TILE_SIZE;
     this.ypos = ypos * TILE_SIZE;
     this.mouth = mouth;
+    this.maxWidth = (maxWidth - 1) * TILE_SIZE;
+    this.maxHeight = (maxHeight - 1) * TILE_SIZE;
   }
 
   render() {
@@ -42,11 +44,11 @@ class Pacman{
   }
 
   move(direction) {
-    if (direction === 'right' && this.xpos < (9 * TILE_SIZE)) {
+    if (direction === 'right' && this.xpos < this.maxWidth) {
         this.xpos += TILE_SIZE;
     } else if (direction === 'left' && this.xpos > 0) {
         this.xpos -= TILE_SIZE;
-    } else if (direction === 'down' && this.ypos < (4 * TILE_SIZE)) {
+    } else if (direction === 'down' && this.ypos < this.maxHeight) {
         this.ypos += TILE_SIZE;
     } else if (direction === 'up' && this.ypos > 0) {
         this.ypos -= TILE_SIZE;

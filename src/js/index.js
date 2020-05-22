@@ -1,12 +1,14 @@
 'use strict';
 
 const TILE_SIZE = 85;
+const width = 10;
+const height = 5;
 const app = document.querySelector('#app')
-const stage = new Stage(10, 5);
+const stage = new Stage(width, height);
 stage.mount(app);
 const stageElm = document.querySelector('.stage');
 
-const pac1 = new Pacman (0, 3, true);
+const pac1 = new Pacman (0, 3, true, width, height);
 pac1.mount(stageElm);
 
 document.addEventListener('keydown', (event) => {
