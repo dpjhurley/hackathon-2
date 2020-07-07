@@ -1,18 +1,18 @@
 'use strict';
 
 class Pacman{
-  constructor(xpos, ypos ,mouth, maxWidth, maxHeight) {
-    this.xpos = xpos * TILE_SIZE;
-    this.ypos = ypos * TILE_SIZE;
+  constructor(stage, xpos, ypos ,mouth, gender, color) {
+    this.stage = stage;
+    this.position = {x: xpos, y: ypos}
     this.mouth = mouth;
-    this.maxWidth = (maxWidth - 1) * TILE_SIZE;
-    this.maxHeight = (maxHeight - 1) * TILE_SIZE;
+    this.gender = gender;
+    this.color = color; 
+    this.score = 0;
+    this.alive = true;
   }
 
   render() {
     const entityElm = document.createElement('div');
-    entityElm.className = 'entity entity--pac';
-    entityElm.classList.add('pacboy-active-light');
 
     return entityElm;
   }
@@ -23,44 +23,97 @@ class Pacman{
     this.update();
   }
 
-  update(direction) {
-    this.element.style.left = `${pac1.xpos}px`;
-    this.element.style.top = `${pac1.ypos}px`;
-    if (direction === 'right') {
-        this.element.style.backgroundPositionY = '0%';
+  move(direction) {
+    this.updateFacing(direction);
+    this.updateMouth();
+    this.position = this.updateCollision(
+        this.computeNewPosition(direction)
+    );
+    this.update();
+  }
+  
+  update() {    
+    this.updateAppearance();
+    this.updatePosition();
+  }
+
+  computeNewPosition (direction) {
+    if (direction === 'right' ) {
+      return {x: this.position.x + 1, y: this.position.y };
     } else if (direction === 'left') {
-        this.element.style.backgroundPositionY = '33%';
+      return {x: this.position.x - 1, y: this.position.y };
     } else if (direction === 'down') {
-        this.element.style.backgroundPositionY = '66%';
+      return {x: this.position.x, y: this.position.y + 1};
     } else if (direction === 'up') {
-        this.element.style.backgroundPositionY = '100%';
+      return {x: this.position.x, y: this.position.y - 1};
     }
-    if (this.mouth === true) {
-    this.element.style.backgroundPositionX = '0%';
-    } else if (this.mouth === false) {
-    this.element.style.backgroundPositionX = '100%';
+  }
+
+  updateCollision(newPos) {
+    if (!this.stage.withinBorders(newPos.x, newPos.y)) {
+      return this.position;
+    }
+
+    const collisionEntity = this.stage.collisionDetection(newPos.x, newPos.y);
+    if (collisionEntity === null) {
+      return newPos;
+    } else if (collisionEntity.type === 'wall') {
+      return this.position;
+    } else if (collisionEntity.type === 'apple') {
+      this.score +=1;
+      this.stage.removeEntity(collisionEntity);
+      return newPos;
+    } else if (collisionEntity.type === 'bomb') {
+      if (Math.random() > 0.5) {
+        this.alive = !this.alive;
+      }
+      this.stage.removeEntity(collisionEntity);
+      return newPos;
+    }
+  }
+
+  updateAppearance() {
+    if (this.alive === true) {
+      this.element.className = 'entity entity--pac';
+      this.element.classList.add(`pac${this.gender}-active-${this.color}`);
+      this.element.innerHTML = `
+        <div>Total = ${this.score}</div>
+      `;
+    } else {
+      this.element.className = 'entity entity--tomb';
+      this.element.innerHTML = '';
+    }
+  }
+
+  updatePosition() {
+    if (this.alive === true) {
+      this.element.style.left = `${this.position.x * TILE_SIZE}px`;
+      this.element.style.top = `${this.position.y * TILE_SIZE}px`;
     }
     
   }
 
-  move(direction) {
-    if (direction === 'right' && this.xpos < this.maxWidth) {
-        this.xpos += TILE_SIZE;
-    } else if (direction === 'left' && this.xpos > 0) {
-        this.xpos -= TILE_SIZE;
-    } else if (direction === 'down' && this.ypos < this.maxHeight) {
-        this.ypos += TILE_SIZE;
-    } else if (direction === 'up' && this.ypos > 0) {
-        this.ypos -= TILE_SIZE;
+  updateFacing(direction) {
+    if (direction === 'right') {
+      this.element.style.backgroundPositionY = '0%';
+    } else if (direction === 'left') {
+      this.element.style.backgroundPositionY = '33%';
+    } else if (direction === 'down') {
+      this.element.style.backgroundPositionY = '66%';
+    } else if (direction === 'up') {
+      this.element.style.backgroundPositionY = '100%';
     }
+  }
+  
+  updateMouth() {
     if (this.mouth === true) {
-    this.element.style.backgroundPositionX = '100%';
-    this.mouth = false;
+      this.element.style.backgroundPositionX = '100%';
+      this.mouth = false;
     } else if (this.mouth === false) {
-    this.element.style.backgroundPositionX = '0%';
-    this.mouth = true;
+      this.element.style.backgroundPositionX = '0%';
+      this.mouth = true;
     }
-  }   
+  }
 }
 
 
